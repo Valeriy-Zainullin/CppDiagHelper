@@ -3,7 +3,6 @@ compiler: gcc
 os: linux
 
 before_script:
-  - cmake --version
   - mkdir build_debug
   - cd build_debug
   - cmake -DCMAKE_BUILD_TYPE=Debug ..

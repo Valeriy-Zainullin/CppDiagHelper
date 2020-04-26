@@ -11,7 +11,7 @@ Console::Console() {
 		throw std::runtime_error("Failed to set locale.");
 	}
 	if (initscr() == nullptr) {
-		throw new std::runtime_error("Failed to initialize ncurses.");
+		throw std::runtime_error("Failed to initialize ncurses.");
 	}
 	noecho();
 	keypad(stdscr, true);

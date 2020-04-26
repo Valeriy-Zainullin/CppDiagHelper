@@ -1,5 +1,9 @@
 # CppDiagHelper
+[![Master branch build status](https://travis-ci.org/Valeriy-Zainullin/CppDiagHelper.svg?branch=master)](https://travis-ci.org/Valeriy-Zainullin/CppDiagHelper)
+[![Dev branch build status](https://travis-ci.org/Valeriy-Zainullin/CppDiagHelper.svg?branch=dev)](https://travis-ci.org/Valeriy-Zainullin/CppDiagHelper)
+
 Приложение для показа ошибок компиляции в текстовом интерфейсе.  
+
 При разработке следуем
 [стилю Google оформления кода](https://google.github.io/styleguide/cppguide.html) следующим образом:
 начинаем с секции `Naming`, затем уже во время работы будем решать, хотим ли следовать каким-то

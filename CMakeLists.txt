@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories("src/")
 add_compile_options(-pedantic -Wall -Wextra -Wshadow -Werror)
 
+set(CURSES_NEED_NCURSES TRUE)
 find_package(Curses REQUIRED)
 
 add_executable(CppDiagHelper src/main.cc src/ui.cc)

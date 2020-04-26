@@ -7,9 +7,6 @@
 using namespace diags::ui;
 
 Console::Console() {
-	if (std::setlocale(LC_ALL, "") == nullptr) {
-		throw std::runtime_error("Failed to set locale.");
-	}
 	if (initscr() == nullptr) {
 		throw std::runtime_error("Failed to initialize ncurses.");
 	}

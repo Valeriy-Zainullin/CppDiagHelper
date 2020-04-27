@@ -44,6 +44,38 @@ void Console::write(const char* str) {
 InterfaceObject::InterfaceObject(Console& consoleParam)
 	: console(consoleParam) {}
 
+void InterfaceObject::drawTopBorder(unsigned int width) {
+	drawPattern("┌", "─", "┐", width);
+}
+
+void InterfaceObject::drawEmptyLine(unsigned int width) {
+	drawPattern("│", " ", "│", width);
+}
+
+void InterfaceObject::drawSeparationLine(unsigned int width) {
+	drawPattern("│", "─", "│", width);
+}
+
+void InterfaceObject::drawBottomBorder(unsigned int width) {
+	drawPattern("└", "─", "┘", width);
+}
+
+const unsigned int InterfaceObject::PATTERN_MIN_LEN = 3;
+
+void InterfaceObject::drawPattern(
+	const char* firstChar,
+	const char* fillChar,
+	const char* lastChar,
+	unsigned int width
+) {
+	assert(PATTERN_MIN_LEN <= width);
+	console.write(firstChar);
+	for (unsigned int i = 2; i < width; ++i) {
+		console.write(fillChar);
+	}
+	console.write(lastChar);
+}
+
 
 DiagnosticsList::DiagnosticsList(Console& consoleParam)
 	: InterfaceObject(consoleParam) {}
@@ -55,11 +87,10 @@ const unsigned int DiagnosticsList::LINE_COL_WIDTH = 8;
 const unsigned int DiagnosticsList::TYPE_COL_WIDTH = 15;
 const unsigned int DiagnosticsList::DELIMETERS_BEFORE_CONTENT_COL = 3;
 const unsigned int DiagnosticsList::CONTENT_COL_CONST_PART_LEN = 12;
-const unsigned int DiagnosticsList::SEPARATOR_MIN_LEN = 3;
 
 void DiagnosticsList::draw(unsigned int width, unsigned int height) {
 	drawHeading(width);
-	drawSeparator(width);
+	drawSeparationLine(width);
 	drawItems(width, height - 2); // TODO: подумать над стилем этой строки!
 }
 
@@ -90,19 +121,11 @@ void DiagnosticsList::drawHeading(unsigned int width) {
 	console.write("│");
 }
 
-void DiagnosticsList::drawSeparator(unsigned int width) {
-	assert(SEPARATOR_MIN_LEN <= width);
-	console.write("│");
-	for (unsigned int i = 2; i < width; ++i) {
-		console.write("─");
-	}
-	console.write("│");
-}
 
 void DiagnosticsList::drawItems(unsigned int width, unsigned int height) {
 	//console.write("│       4 Предупреждение  declaration of 'a' shadows a previous local [-W│\n");
 	for (unsigned int row = 0; row < height; ++row) {
-		drawSeparator(width);
+		drawEmptyLine(width);
 	}
 }
 
@@ -125,9 +148,9 @@ void DetailedView::draw(unsigned int width, unsigned int height) {
 	console.write("│ warning: declaration of 'a' shadows a previous local [-Wshadow]        │\n");
 	console.write("│     4 |   int a = 2;                                                   │\n");
 	console.write("│       |       ^                                                        │\n");
-	console.write("│                                                                        │\n");
-	console.write("│                                                                        │\n");
-	console.write("│                                                                        │\n");
+	drawEmptyLine(width);
+	drawEmptyLine(width);
+	drawEmptyLine(width);
 }
 
 
@@ -173,27 +196,12 @@ void Interface::draw() {
 	move(0, 0);
 	drawTopBorder(totalWidth);
 	diagList.draw(totalWidth, getDiagListHeight(totalHeight));
-	drawSeparator(totalWidth);
+	drawSeparationLine(totalWidth);
 	navBar.draw(totalWidth);
-	drawSeparator(totalWidth);
+	drawSeparationLine(totalWidth);
 	detailedView.draw(totalWidth, getDetailedViewHeight(totalHeight));
-	drawSeparator(totalWidth);
+	drawSeparationLine(totalWidth);
 	infoPanel.draw(totalWidth);
 	drawBottomBorder(totalWidth);
 	refresh();
-}
-
-void Interface::drawTopBorder(unsigned int width) {
-	((void) width);
-	console.write("┌────────────────────────────────────────────────────────────────────────┐\n");
-}
-
-void Interface::drawSeparator(unsigned int width) {
-	((void) width);
-	console.write("│────────────────────────────────────────────────────────────────────────│\n");
-}
-
-void Interface::drawBottomBorder(unsigned int width) {
-	((void) width);
-	console.write("└────────────────────────────────────────────────────────────────────────┘\n");
 }

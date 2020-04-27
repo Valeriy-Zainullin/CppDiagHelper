@@ -24,9 +24,21 @@ namespace diags {
 
 			InterfaceObject& operator=(const InterfaceObject& other) = delete;
 
-			// void drawSeparationLine(unsigned int width);
+			void drawTopBorder(unsigned int width);
+			void drawEmptyLine(unsigned int width);
+			void drawSeparationLine(unsigned int width);
+			void drawBottomBorder(unsigned int width);
 		protected:
 			Console& console;
+		private:
+			static const unsigned int PATTERN_MIN_LEN;
+		private:
+			void drawPattern(
+				const char* firstChar,
+				const char* fillChar,
+				const char* lastChar,
+				unsigned int width
+			);
 		};
 
 		class DiagnosticsList : public InterfaceObject {
@@ -48,7 +60,6 @@ namespace diags {
 			unsigned int getContentColWidth(unsigned int totalWidth);
 
 			void drawHeading(unsigned int width);
-			void drawSeparator(unsigned int width);
 			void drawItems(unsigned int width, unsigned int height);
 		};
 
@@ -83,9 +94,6 @@ namespace diags {
 			unsigned int getDetailedViewHeight(unsigned int totalHeight);
 
 			void draw();
-			void drawTopBorder(unsigned int width);
-			void drawSeparator(unsigned int width);
-			void drawBottomBorder(unsigned int width);
 		private:
 			DiagnosticsList diagList;
 			NavigationBar navBar;

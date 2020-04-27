@@ -34,6 +34,19 @@ void Console::getSize(unsigned int& width, unsigned int& height) {
 	height = signedMaxRow;
 }
 
+void Console::write(const char* str) {
+	if (addstr(str) == ERR) {
+		throw std::runtime_error("Failed to write onto the screen.");
+	}
+}
+
+
+InterfaceObject::InterfaceObject(Console& consoleParam)
+	: console(consoleParam) {}
+
+
+DiagnosticsList::DiagnosticsList(Console& consoleParam)
+	: InterfaceObject(consoleParam) {}
 
 const char DiagnosticsList::HEADING_CONST_PART[] = "│ Строка │ Тип           │ Содержание ";
 const std::size_t DiagnosticsList::HEADING_CONST_PART_LEN =
@@ -70,56 +83,71 @@ unsigned int DiagnosticsList::getContentColWidth(unsigned int totalWidth) {
 }
 
 void DiagnosticsList::drawHeading(unsigned int width) {
-	addstr(HEADING_CONST_PART);
+	console.write(HEADING_CONST_PART);
 	for (unsigned int i = CONTENT_COL_CONST_PART_LEN; i < getContentColWidth(width); ++i) {
-		addch(' ');
+		console.write(" ");
 	}
-	addstr("│");
+	console.write("│");
 }
 
 void DiagnosticsList::drawSeparator(unsigned int width) {
 	assert(SEPARATOR_MIN_LEN <= width);
-	addstr("│");
+	console.write("│");
 	for (unsigned int i = 2; i < width; ++i) {
-		addstr("─");
+		console.write("─");
 	}
-	addstr("│");
+	console.write("│");
 }
 
 void DiagnosticsList::drawItems(unsigned int width, unsigned int height) {
-	//addstr("│       4 Предупреждение  declaration of 'a' shadows a previous local [-W│\n");
+	//console.write("│       4 Предупреждение  declaration of 'a' shadows a previous local [-W│\n");
 	for (unsigned int row = 0; row < height; ++row) {
 		drawSeparator(width);
 	}
 }
 
 
+NavigationBar::NavigationBar(Console& consoleParam)
+	: InterfaceObject(consoleParam) {}
+
 void NavigationBar::draw(unsigned int width) {
 	((void) width);
-	addstr("│ Подробно Замечания Подсказки Исправления      Препроцессинг Компиляция │\n");
+	console.write("│ Подробно Замечания Подсказки Исправления      Препроцессинг Компиляция │\n");
 }
 
+
+DetailedView::DetailedView(Console& consoleParam)
+	: InterfaceObject(consoleParam) {}
 
 void DetailedView::draw(unsigned int width, unsigned int height) {
 	((void) width);
 	((void) height);
-	addstr("│ warning: declaration of 'a' shadows a previous local [-Wshadow]        │\n");
-	addstr("│     4 |   int a = 2;                                                   │\n");
-	addstr("│       |       ^                                                        │\n");
-	addstr("│                                                                        │\n");
-	addstr("│                                                                        │\n");
-	addstr("│                                                                        │\n");
+	console.write("│ warning: declaration of 'a' shadows a previous local [-Wshadow]        │\n");
+	console.write("│     4 |   int a = 2;                                                   │\n");
+	console.write("│       |       ^                                                        │\n");
+	console.write("│                                                                        │\n");
+	console.write("│                                                                        │\n");
+	console.write("│                                                                        │\n");
 }
 
+
+InformationPanel::InformationPanel(Console& consoleParam)
+	: InterfaceObject(consoleParam) {}
 
 void InformationPanel::draw(unsigned int width) {
 	((void) width);
-	addstr("│ Файл: ~/Учёба/Проект/src/Console.cpp  │ Ошибок: 20 │ Предупреждений: 4 │\n");
+	console.write("│ Файл: ~/Учёба/Проект/src/Console.cpp  │ Ошибок: 20 │ Предупреждений: 4 │\n");
 }
 
 
+// TODO: Задуматься о стиле!
 Interface::Interface(Console& consoleParam)
-	: console(consoleParam) {
+	:
+		InterfaceObject(consoleParam),
+		diagList(consoleParam),
+		navBar(consoleParam),
+		detailedView(consoleParam),
+		infoPanel(consoleParam) {
 	draw();
 }
 
@@ -157,15 +185,15 @@ void Interface::draw() {
 
 void Interface::drawTopBorder(unsigned int width) {
 	((void) width);
-	addstr("┌────────────────────────────────────────────────────────────────────────┐\n");
+	console.write("┌────────────────────────────────────────────────────────────────────────┐\n");
 }
 
 void Interface::drawSeparator(unsigned int width) {
 	((void) width);
-	addstr("│────────────────────────────────────────────────────────────────────────│\n");
+	console.write("│────────────────────────────────────────────────────────────────────────│\n");
 }
 
 void Interface::drawBottomBorder(unsigned int width) {
 	((void) width);
-	addstr("└────────────────────────────────────────────────────────────────────────┘\n");
+	console.write("└────────────────────────────────────────────────────────────────────────┘\n");
 }

@@ -14,15 +14,24 @@ namespace diags {
 			Console& operator=(const Console& other) = delete;
 
 			void getSize(unsigned int& width, unsigned int& height);
+			void write(const char* str);
 		};
 
-		class DiagnosticsList {
-		public:
-			DiagnosticsList() = default;
-			DiagnosticsList(const DiagnosticsList& other) = delete;
-			~DiagnosticsList() = default;
+		class InterfaceObject {
+		protected:
+			InterfaceObject(Console& consoleParam);
+			InterfaceObject(const InterfaceObject& other) = delete;
 
-			DiagnosticsList& operator=(const DiagnosticsList& other) = delete;
+			InterfaceObject& operator=(const InterfaceObject& other) = delete;
+
+			// void drawSeparationLine(unsigned int width);
+		protected:
+			Console& console;
+		};
+
+		class DiagnosticsList : public InterfaceObject {
+		public:
+			DiagnosticsList(Console& console);
 
 			void draw(unsigned int width, unsigned int height);
 		private:
@@ -43,46 +52,30 @@ namespace diags {
 			void drawItems(unsigned int width, unsigned int height);
 		};
 
-		class NavigationBar {
+		class NavigationBar : public InterfaceObject {
 		public:
-			NavigationBar() = default;
-			NavigationBar(const NavigationBar& other) = delete;
-			~NavigationBar() = default;
-
-			NavigationBar& operator=(const NavigationBar& other) = delete;
+			NavigationBar(Console& consoleParam);
 
 			void draw(unsigned int width);
 		};
 
-		class DetailedView {
+		class DetailedView : public InterfaceObject {
 		public:
-			DetailedView() = default;
-			DetailedView(const DetailedView& other) = delete;
-			~DetailedView() = default;
-
-			DetailedView& operator=(const DetailedView& other) = delete;
+			DetailedView(Console& consoleParam);
 
 			void draw(unsigned int width, unsigned int height);
 		};
 
-		class InformationPanel {
+		class InformationPanel : public InterfaceObject {
 		public:
-			InformationPanel() = default;
-			InformationPanel(const InformationPanel& other) = delete;
-			~InformationPanel() = default;
-
-			InformationPanel& operator=(const InformationPanel& other) = delete;
+			InformationPanel(Console& consoleParam);
 
 			void draw(unsigned int width);
 		};
 
-		class Interface {
+		class Interface : public InterfaceObject {
 		public:
 			Interface(Console& consoleParam);
-			Interface(const Interface& other) = delete;
-			~Interface() = default;
-
-			Interface& operator=(const Interface& other) = delete;
 
 			void runEventLoop();
 		private:
@@ -94,7 +87,6 @@ namespace diags {
 			void drawSeparator(unsigned int width);
 			void drawBottomBorder(unsigned int width);
 		private:
-			Console& console;
 			DiagnosticsList diagList;
 			NavigationBar navBar;
 			DetailedView detailedView;

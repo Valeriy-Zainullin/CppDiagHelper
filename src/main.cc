@@ -6,7 +6,7 @@ using diags::ui::Interface;
 
 int main() {
 	Console console;
-	Interface interface;
+	Interface interface(console);
 	interface.runEventLoop();
 	return 0;
 }

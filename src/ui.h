@@ -1,6 +1,8 @@
 #ifndef UI_H
 #define UI_H
 
+#include <cstddef>
+
 namespace diags {
 	namespace ui {
 		class Console {
@@ -10,6 +12,8 @@ namespace diags {
 			~Console();
 
 			Console& operator=(const Console& other) = delete;
+
+			void getSize(unsigned int& width, unsigned int& height);
 		};
 
 		class DiagnosticsList {
@@ -20,7 +24,23 @@ namespace diags {
 
 			DiagnosticsList& operator=(const DiagnosticsList& other) = delete;
 
-			void draw();
+			void draw(unsigned int width, unsigned int height);
+		private:
+			static const char HEADING_CONST_PART[];
+			static const std::size_t HEADING_CONST_PART_LEN;
+			static const unsigned int LINE_COL_WIDTH;
+			static const unsigned int TYPE_COL_WIDTH;
+			static const unsigned int DELIMETERS_BEFORE_CONTENT_COL;
+			static const unsigned int CONTENT_COL_CONST_PART_LEN;
+			static const unsigned int SEPARATOR_MIN_LEN;
+		private:
+			unsigned int getLineColWidth(unsigned int totalWidth);
+			unsigned int getTypeColWidth(unsigned int totalWidth);
+			unsigned int getContentColWidth(unsigned int totalWidth);
+
+			void drawHeading(unsigned int width);
+			void drawSeparator(unsigned int width);
+			void drawItems(unsigned int width, unsigned int height);
 		};
 
 		class NavigationBar {
@@ -31,7 +51,7 @@ namespace diags {
 
 			NavigationBar& operator=(const NavigationBar& other) = delete;
 
-			void draw();
+			void draw(unsigned int width);
 		};
 
 		class DetailedView {
@@ -42,7 +62,7 @@ namespace diags {
 
 			DetailedView& operator=(const DetailedView& other) = delete;
 
-			void draw();
+			void draw(unsigned int width, unsigned int height);
 		};
 
 		class InformationPanel {
@@ -53,12 +73,12 @@ namespace diags {
 
 			InformationPanel& operator=(const InformationPanel& other) = delete;
 
-			void draw();
+			void draw(unsigned int width);
 		};
 
 		class Interface {
 		public:
-			Interface();
+			Interface(Console& consoleParam);
 			Interface(const Interface& other) = delete;
 			~Interface() = default;
 
@@ -66,10 +86,15 @@ namespace diags {
 
 			void runEventLoop();
 		private:
-			void drawTopBorder();
-			void drawSeparator();
-			void drawBottomBorder();
+			unsigned int getDiagListHeight(unsigned int totalHeight);
+			unsigned int getDetailedViewHeight(unsigned int totalHeight);
+
+			void draw();
+			void drawTopBorder(unsigned int width);
+			void drawSeparator(unsigned int width);
+			void drawBottomBorder(unsigned int width);
 		private:
+			Console& console;
 			DiagnosticsList diagList;
 			NavigationBar navBar;
 			DetailedView detailedView;

@@ -1,0 +1,9 @@
+In file included from W-03.cpp:1:
+W-03.h: In function 'void doWork()':
+W-03.h:10:8: error: comparison of integer expressions of different signedness: 'int' and 'unsigned int' [-Werror=sign-compare]
+   10 |  if (a < b) {
+      |      ~~^~~
+W-03.h:13:9: error: return-statement with a value, in function returning 'void' [-fpermissive]
+   13 |  return 0;
+      |         ^
+cc1plus: all warnings being treated as errors

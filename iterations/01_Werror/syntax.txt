@@ -1,371 +1,131 @@
-In file included from /usr/include/c++/9.3.0/bits/stl_map.h:63,
-                 from /usr/include/c++/9.3.0/map:61,
-                 from 01/E-01.cpp:1:
-/usr/include/c++/9.3.0/tuple: In instantiation of 'std::pair<_T1, _T2>::pair(std::tuple<_Args1 ...>&, std::tuple<_Args2 ...>&, std::_Index_tuple<_Indexes1 ...>, std::_Index_tuple<_Indexes2 ...>) [with _Args1 = {int&&}; long unsigned int ..._Indexes1 = {0}; _Args2 = {}; long unsigned int ..._Indexes2 = {}; _T1 = const int; _T2 = Student]':
-/usr/include/c++/9.3.0/tuple:1663:63:   required from 'std::pair<_T1, _T2>::pair(std::piecewise_construct_t, std::tuple<_Args1 ...>, std::tuple<_Args2 ...>) [with _Args1 = {int&&}; _Args2 = {}; _T1 = const int; _T2 = Student]'
-/usr/include/c++/9.3.0/ext/new_allocator.h:147:4:   required from 'void __gnu_cxx::new_allocator<_Tp>::construct(_Up*, _Args&& ...) [with _Up = std::pair<const int, Student>; _Args = {const std::piecewise_construct_t&, std::tuple<int&&>, std::tuple<>}; _Tp = std::_Rb_tree_node<std::pair<const int, Student> >]'
-/usr/include/c++/9.3.0/bits/alloc_traits.h:484:4:   required from 'static void std::allocator_traits<std::allocator<_Tp1> >::construct(std::allocator_traits<std::allocator<_Tp1> >::allocator_type&, _Up*, _Args&& ...) [with _Up = std::pair<const int, Student>; _Args = {const std::piecewise_construct_t&, std::tuple<int&&>, std::tuple<>}; _Tp = std::_Rb_tree_node<std::pair<const int, Student> >; std::allocator_traits<std::allocator<_Tp1> >::allocator_type = std::allocator<std::_Rb_tree_node<std::pair<const int, Student> > >]'
-/usr/include/c++/9.3.0/bits/stl_tree.h:614:32:   required from 'void std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_construct_node(std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_Link_type, _Args&& ...) [with _Args = {const std::piecewise_construct_t&, std::tuple<int&&>, std::tuple<>}; _Key = int; _Val = std::pair<const int, Student>; _KeyOfValue = std::_Select1st<std::pair<const int, Student> >; _Compare = std::less<int>; _Alloc = std::allocator<std::pair<const int, Student> >; std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_Link_type = std::_Rb_tree_node<std::pair<const int, Student> >*]'
-/usr/include/c++/9.3.0/bits/stl_tree.h:631:4:   required from 'std::_Rb_tree_node<_Val>* std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_create_node(_Args&& ...) [with _Args = {const std::piecewise_construct_t&, std::tuple<int&&>, std::tuple<>}; _Key = int; _Val = std::pair<const int, Student>; _KeyOfValue = std::_Select1st<std::pair<const int, Student> >; _Compare = std::less<int>; _Alloc = std::allocator<std::pair<const int, Student> >; std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_Link_type = std::_Rb_tree_node<std::pair<const int, Student> >*]'
-/usr/include/c++/9.3.0/bits/stl_tree.h:2455:13:   required from 'std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::iterator std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_emplace_hint_unique(std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::const_iterator, _Args&& ...) [with _Args = {const std::piecewise_construct_t&, std::tuple<int&&>, std::tuple<>}; _Key = int; _Val = std::pair<const int, Student>; _KeyOfValue = std::_Select1st<std::pair<const int, Student> >; _Compare = std::less<int>; _Alloc = std::allocator<std::pair<const int, Student> >; std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::iterator = std::_Rb_tree_iterator<std::pair<const int, Student> >; std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::const_iterator = std::_Rb_tree_const_iterator<std::pair<const int, Student> >]'
-/usr/include/c++/9.3.0/bits/stl_map.h:518:8:   required from 'std::map<_Key, _Tp, _Compare, _Alloc>::mapped_type& std::map<_Key, _Tp, _Compare, _Alloc>::operator[](std::map<_Key, _Tp, _Compare, _Alloc>::key_type&&) [with _Key = int; _Tp = Student; _Compare = std::less<int>; _Alloc = std::allocator<std::pair<const int, Student> >; std::map<_Key, _Tp, _Compare, _Alloc>::mapped_type = Student; std::map<_Key, _Tp, _Compare, _Alloc>::key_type = int]'
-01/E-01.cpp:13:7:   required from here
-/usr/include/c++/9.3.0/tuple:1674:70: error: no matching function for call to 'Student::Student()'
- 1674 |         second(std::forward<_Args2>(std::get<_Indexes2>(__tuple2))...)
-      |                                                                      ^
-01/E-01.cpp:5:2: note: candidate: 'Student::Student(int)'
-    5 |  Student(int markParam)
-      |  ^~~~~~~
-01/E-01.cpp:5:2: note:   candidate expects 1 argument, 0 provided
-01/E-01.cpp:3:7: note: candidate: 'constexpr Student::Student(const Student&)'
-    3 | class Student {
-      |       ^~~~~~~
-01/E-01.cpp:3:7: note:   candidate expects 1 argument, 0 provided
-01/E-01.cpp:3:7: note: candidate: 'constexpr Student::Student(Student&&)'
-01/E-01.cpp:3:7: note:   candidate expects 1 argument, 0 provided
-
-01/E-02.cpp: In function 'void setName(const char*)':
-01/E-02.cpp:5:26: error: unused parameter 'str' [-Werror=unused-parameter]
-    5 | void setName(const char* str) {}
-      |              ~~~~~~~~~~~~^~~
-01/E-02.cpp: In function 'int main()':
-01/E-02.cpp:8:12: error: no match for 'operator<<' (operand types are 'std::ostream' {aka 'std::basic_ostream<char>'} and 'void')
-    8 |  std::cout << getNumber();
-      |  ~~~~~~~~~ ^~ ~~~~~~~~~~~
-      |       |                |
-      |       |                void
-      |       std::ostream {aka std::basic_ostream<char>}
-In file included from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/ostream:108:7: note: candidate: 'std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(std::basic_ostream<_CharT, _Traits>::__ostream_type& (*)(std::basic_ostream<_CharT, _Traits>::__ostream_type&)) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]'
-  108 |       operator<<(__ostream_type& (*__pf)(__ostream_type&))
-      |       ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:108:36: note:   no known conversion for argument 1 from 'void' to 'std::basic_ostream<char>::__ostream_type& (*)(std::basic_ostream<char>::__ostream_type&)' {aka 'std::basic_ostream<char>& (*)(std::basic_ostream<char>&)'}
-  108 |       operator<<(__ostream_type& (*__pf)(__ostream_type&))
-      |                  ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
-/usr/include/c++/9.3.0/ostream:117:7: note: candidate: 'std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(std::basic_ostream<_CharT, _Traits>::__ios_type& (*)(std::basic_ostream<_CharT, _Traits>::__ios_type&)) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>; std::basic_ostream<_CharT, _Traits>::__ios_type = std::basic_ios<char>]'
-  117 |       operator<<(__ios_type& (*__pf)(__ios_type&))
-      |       ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:117:32: note:   no known conversion for argument 1 from 'void' to 'std::basic_ostream<char>::__ios_type& (*)(std::basic_ostream<char>::__ios_type&)' {aka 'std::basic_ios<char>& (*)(std::basic_ios<char>&)'}
-  117 |       operator<<(__ios_type& (*__pf)(__ios_type&))
-      |                  ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-/usr/include/c++/9.3.0/ostream:127:7: note: candidate: 'std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(std::ios_base& (*)(std::ios_base&)) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]'
-  127 |       operator<<(ios_base& (*__pf) (ios_base&))
-      |       ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:127:30: note:   no known conversion for argument 1 from 'void' to 'std::ios_base& (*)(std::ios_base&)'
-  127 |       operator<<(ios_base& (*__pf) (ios_base&))
-      |                  ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
-/usr/include/c++/9.3.0/ostream:166:7: note: candidate: 'std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(long int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]'
-  166 |       operator<<(long __n)
-      |       ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:166:23: note:   no known conversion for argument 1 from 'void' to 'long int'
-  166 |       operator<<(long __n)
-      |                  ~~~~~^~~
-/usr/include/c++/9.3.0/ostream:170:7: note: candidate: 'std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(long unsigned int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]'
-  170 |       operator<<(unsigned long __n)
-      |       ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:170:32: note:   no known conversion for argument 1 from 'void' to 'long unsigned int'
-  170 |       operator<<(unsigned long __n)
-      |                  ~~~~~~~~~~~~~~^~~
-/usr/include/c++/9.3.0/ostream:174:7: note: candidate: 'std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(bool) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]'
-  174 |       operator<<(bool __n)
-      |       ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:174:23: note:   no known conversion for argument 1 from 'void' to 'bool'
-  174 |       operator<<(bool __n)
-      |                  ~~~~~^~~
-In file included from /usr/include/c++/9.3.0/ostream:702,
-                 from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/bits/ostream.tcc:91:5: note: candidate: 'std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(short int) [with _CharT = char; _Traits = std::char_traits<char>]'
-   91 |     basic_ostream<_CharT, _Traits>::
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/usr/include/c++/9.3.0/bits/ostream.tcc:92:22: note:   no known conversion for argument 1 from 'void' to 'short int'
-   92 |     operator<<(short __n)
-      |                ~~~~~~^~~
-In file included from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/ostream:181:7: note: candidate: 'std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(short unsigned int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]'
-  181 |       operator<<(unsigned short __n)
-      |       ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:181:33: note:   no known conversion for argument 1 from 'void' to 'short unsigned int'
-  181 |       operator<<(unsigned short __n)
-      |                  ~~~~~~~~~~~~~~~^~~
-In file included from /usr/include/c++/9.3.0/ostream:702,
-                 from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/bits/ostream.tcc:105:5: note: candidate: 'std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(int) [with _CharT = char; _Traits = std::char_traits<char>]'
-  105 |     basic_ostream<_CharT, _Traits>::
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/usr/include/c++/9.3.0/bits/ostream.tcc:106:20: note:   no known conversion for argument 1 from 'void' to 'int'
-  106 |     operator<<(int __n)
-      |                ~~~~^~~
-In file included from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/ostream:192:7: note: candidate: 'std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(unsigned int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]'
-  192 |       operator<<(unsigned int __n)
-      |       ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:192:31: note:   no known conversion for argument 1 from 'void' to 'unsigned int'
-  192 |       operator<<(unsigned int __n)
-      |                  ~~~~~~~~~~~~~^~~
-/usr/include/c++/9.3.0/ostream:201:7: note: candidate: 'std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(long long int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]'
-  201 |       operator<<(long long __n)
-      |       ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:201:28: note:   no known conversion for argument 1 from 'void' to 'long long int'
-  201 |       operator<<(long long __n)
-      |                  ~~~~~~~~~~^~~
-/usr/include/c++/9.3.0/ostream:205:7: note: candidate: 'std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(long long unsigned int) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]'
-  205 |       operator<<(unsigned long long __n)
-      |       ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:205:37: note:   no known conversion for argument 1 from 'void' to 'long long unsigned int'
-  205 |       operator<<(unsigned long long __n)
-      |                  ~~~~~~~~~~~~~~~~~~~^~~
-/usr/include/c++/9.3.0/ostream:220:7: note: candidate: 'std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(double) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]'
-  220 |       operator<<(double __f)
-      |       ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:220:25: note:   no known conversion for argument 1 from 'void' to 'double'
-  220 |       operator<<(double __f)
-      |                  ~~~~~~~^~~
-/usr/include/c++/9.3.0/ostream:224:7: note: candidate: 'std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(float) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]'
-  224 |       operator<<(float __f)
-      |       ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:224:24: note:   no known conversion for argument 1 from 'void' to 'float'
-  224 |       operator<<(float __f)
-      |                  ~~~~~~^~~
-/usr/include/c++/9.3.0/ostream:232:7: note: candidate: 'std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(long double) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]'
-  232 |       operator<<(long double __f)
-      |       ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:232:30: note:   no known conversion for argument 1 from 'void' to 'long double'
-  232 |       operator<<(long double __f)
-      |                  ~~~~~~~~~~~~^~~
-/usr/include/c++/9.3.0/ostream:245:7: note: candidate: 'std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(const void*) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>]'
-  245 |       operator<<(const void* __p)
-      |       ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:245:30: note:   no known conversion for argument 1 from 'void' to 'const void*'
-  245 |       operator<<(const void* __p)
-      |                  ~~~~~~~~~~~~^~~
-/usr/include/c++/9.3.0/ostream:250:7: note: candidate: 'std::basic_ostream<_CharT, _Traits>::__ostream_type& std::basic_ostream<_CharT, _Traits>::operator<<(std::nullptr_t) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__ostream_type = std::basic_ostream<char>; std::nullptr_t = std::nullptr_t]'
-  250 |       operator<<(nullptr_t)
-      |       ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:250:18: note:   no known conversion for argument 1 from 'void' to 'std::nullptr_t'
-  250 |       operator<<(nullptr_t)
-      |                  ^~~~~~~~~
-In file included from /usr/include/c++/9.3.0/ostream:702,
-                 from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/bits/ostream.tcc:119:5: note: candidate: 'std::basic_ostream<_CharT, _Traits>& std::basic_ostream<_CharT, _Traits>::operator<<(std::basic_ostream<_CharT, _Traits>::__streambuf_type*) [with _CharT = char; _Traits = std::char_traits<char>; std::basic_ostream<_CharT, _Traits>::__streambuf_type = std::basic_streambuf<char>]'
-  119 |     basic_ostream<_CharT, _Traits>::
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/usr/include/c++/9.3.0/bits/ostream.tcc:120:34: note:   no known conversion for argument 1 from 'void' to 'std::basic_ostream<char>::__streambuf_type*' {aka 'std::basic_streambuf<char>*'}
-  120 |     operator<<(__streambuf_type* __sbin)
-      |                ~~~~~~~~~~~~~~~~~~^~~~~~
-In file included from /usr/include/c++/9.3.0/bits/basic_string.h:48,
-                 from /usr/include/c++/9.3.0/string:55,
-                 from /usr/include/c++/9.3.0/bits/locale_classes.h:40,
-                 from /usr/include/c++/9.3.0/bits/ios_base.h:41,
-                 from /usr/include/c++/9.3.0/ios:42,
-                 from /usr/include/c++/9.3.0/ostream:38,
-                 from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/string_view:582:5: note: candidate: 'template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, std::basic_string_view<_CharT, _Traits>)'
-  582 |     operator<<(basic_ostream<_CharT, _Traits>& __os,
-      |     ^~~~~~~~
-/usr/include/c++/9.3.0/string_view:582:5: note:   template argument deduction/substitution failed:
-01/E-02.cpp:8:25: note:   mismatched types 'std::basic_string_view<_CharT, _Traits>' and 'void'
-    8 |  std::cout << getNumber();
-      |                         ^
-In file included from /usr/include/c++/9.3.0/string:55,
-                 from /usr/include/c++/9.3.0/bits/locale_classes.h:40,
-                 from /usr/include/c++/9.3.0/bits/ios_base.h:41,
-                 from /usr/include/c++/9.3.0/ios:42,
-                 from /usr/include/c++/9.3.0/ostream:38,
-                 from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/bits/basic_string.h:6416:5: note: candidate: 'template<class _CharT, class _Traits, class _Alloc> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const std::__cxx11::basic_string<_CharT, _Traits, _Allocator>&)'
- 6416 |     operator<<(basic_ostream<_CharT, _Traits>& __os,
-      |     ^~~~~~~~
-/usr/include/c++/9.3.0/bits/basic_string.h:6416:5: note:   template argument deduction/substitution failed:
-01/E-02.cpp:8:25: note:   mismatched types 'const std::__cxx11::basic_string<_CharT, _Traits, _Allocator>' and 'void'
-    8 |  std::cout << getNumber();
-      |                         ^
-In file included from /usr/include/c++/9.3.0/bits/ios_base.h:46,
-                 from /usr/include/c++/9.3.0/ios:42,
-                 from /usr/include/c++/9.3.0/ostream:38,
-                 from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/system_error:217:5: note: candidate: 'template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const std::error_code&)'
-  217 |     operator<<(basic_ostream<_CharT, _Traits>& __os, const error_code& __e)
-      |     ^~~~~~~~
-/usr/include/c++/9.3.0/system_error:217:5: note:   template argument deduction/substitution failed:
-01/E-02.cpp:8:24: note:   cannot convert 'getNumber()' (type 'void') to type 'const std::error_code&'
-    8 |  std::cout << getNumber();
-      |               ~~~~~~~~~^~
-In file included from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/ostream:506:5: note: candidate: 'template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, _CharT)'
-  506 |     operator<<(basic_ostream<_CharT, _Traits>& __out, _CharT __c)
-      |     ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:506:5: note:   template argument deduction/substitution failed:
-01/E-02.cpp:8:25: note:   deduced conflicting types for parameter '_CharT' ('char' and 'void')
-    8 |  std::cout << getNumber();
-      |                         ^
-In file included from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/ostream:511:5: note: candidate: 'template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, char)'
-  511 |     operator<<(basic_ostream<_CharT, _Traits>& __out, char __c)
-      |     ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:511:5: note:   template argument deduction/substitution failed:
-01/E-02.cpp:8:24: note:   cannot convert 'getNumber()' (type 'void') to type 'char'
-    8 |  std::cout << getNumber();
-      |               ~~~~~~~~~^~
-In file included from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/ostream:517:5: note: candidate: 'template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, char)'
-  517 |     operator<<(basic_ostream<char, _Traits>& __out, char __c)
-      |     ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:517:5: note:   template argument deduction/substitution failed:
-01/E-02.cpp:8:24: note:   cannot convert 'getNumber()' (type 'void') to type 'char'
-    8 |  std::cout << getNumber();
-      |               ~~~~~~~~~^~
-In file included from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/ostream:523:5: note: candidate: 'template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, signed char)'
-  523 |     operator<<(basic_ostream<char, _Traits>& __out, signed char __c)
-      |     ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:523:5: note:   template argument deduction/substitution failed:
-01/E-02.cpp:8:24: note:   cannot convert 'getNumber()' (type 'void') to type 'signed char'
-    8 |  std::cout << getNumber();
-      |               ~~~~~~~~~^~
-In file included from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/ostream:528:5: note: candidate: 'template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, unsigned char)'
-  528 |     operator<<(basic_ostream<char, _Traits>& __out, unsigned char __c)
-      |     ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:528:5: note:   template argument deduction/substitution failed:
-01/E-02.cpp:8:24: note:   cannot convert 'getNumber()' (type 'void') to type 'unsigned char'
-    8 |  std::cout << getNumber();
-      |               ~~~~~~~~~^~
-In file included from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/ostream:548:5: note: candidate: 'template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const _CharT*)'
-  548 |     operator<<(basic_ostream<_CharT, _Traits>& __out, const _CharT* __s)
-      |     ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:548:5: note:   template argument deduction/substitution failed:
-01/E-02.cpp:8:25: note:   mismatched types 'const _CharT*' and 'void'
-    8 |  std::cout << getNumber();
-      |                         ^
-In file included from /usr/include/c++/9.3.0/ostream:702,
-                 from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/bits/ostream.tcc:321:5: note: candidate: 'template<class _CharT, class _Traits> std::basic_ostream<_CharT, _Traits>& std::operator<<(std::basic_ostream<_CharT, _Traits>&, const char*)'
-  321 |     operator<<(basic_ostream<_CharT, _Traits>& __out, const char* __s)
-      |     ^~~~~~~~
-/usr/include/c++/9.3.0/bits/ostream.tcc:321:5: note:   template argument deduction/substitution failed:
-01/E-02.cpp:8:24: note:   cannot convert 'getNumber()' (type 'void') to type 'const char*'
-    8 |  std::cout << getNumber();
-      |               ~~~~~~~~~^~
-In file included from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/ostream:565:5: note: candidate: 'template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, const char*)'
-  565 |     operator<<(basic_ostream<char, _Traits>& __out, const char* __s)
-      |     ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:565:5: note:   template argument deduction/substitution failed:
-01/E-02.cpp:8:24: note:   cannot convert 'getNumber()' (type 'void') to type 'const char*'
-    8 |  std::cout << getNumber();
-      |               ~~~~~~~~~^~
-In file included from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/ostream:578:5: note: candidate: 'template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, const signed char*)'
-  578 |     operator<<(basic_ostream<char, _Traits>& __out, const signed char* __s)
-      |     ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:578:5: note:   template argument deduction/substitution failed:
-01/E-02.cpp:8:24: note:   cannot convert 'getNumber()' (type 'void') to type 'const signed char*'
-    8 |  std::cout << getNumber();
-      |               ~~~~~~~~~^~
-In file included from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/ostream:583:5: note: candidate: 'template<class _Traits> std::basic_ostream<char, _Traits>& std::operator<<(std::basic_ostream<char, _Traits>&, const unsigned char*)'
-  583 |     operator<<(basic_ostream<char, _Traits>& __out, const unsigned char* __s)
-      |     ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:583:5: note:   template argument deduction/substitution failed:
-01/E-02.cpp:8:24: note:   cannot convert 'getNumber()' (type 'void') to type 'const unsigned char*'
-    8 |  std::cout << getNumber();
-      |               ~~~~~~~~~^~
-In file included from /usr/include/c++/9.3.0/iostream:39,
-                 from 01/E-02.cpp:1:
-/usr/include/c++/9.3.0/ostream:691:5: note: candidate: 'template<class _Ostream, class _Tp> typename std::enable_if<std::__and_<std::__not_<std::is_lvalue_reference<_Tp> >, std::__is_convertible_to_basic_ostream<_Ostream>, std::__is_insertable<typename std::__is_convertible_to_basic_ostream<_Tp>::__ostream_type, const _Tp&, void> >::value, typename std::__is_convertible_to_basic_ostream<_Tp>::__ostream_type>::type std::operator<<(_Ostream&&, const _Tp&)'
-  691 |     operator<<(_Ostream&& __os, const _Tp& __x)
-      |     ^~~~~~~~
-/usr/include/c++/9.3.0/ostream:691:5: note:   template argument deduction/substitution failed:
-/usr/include/c++/9.3.0/ostream: In substitution of 'template<class _Ostream, class _Tp> typename std::enable_if<std::__and_<std::__not_<std::is_lvalue_reference<_Tp> >, std::__is_convertible_to_basic_ostream<_Ostream>, std::__is_insertable<typename std::__is_convertible_to_basic_ostream<_Tp>::__ostream_type, const _Tp&, void> >::value, typename std::__is_convertible_to_basic_ostream<_Tp>::__ostream_type>::type std::operator<<(_Ostream&&, const _Tp&) [with _Ostream = std::basic_ostream<char>&; _Tp = void]':
-01/E-02.cpp:8:25:   required from here
-/usr/include/c++/9.3.0/ostream:691:5: error: forming reference to void
-01/E-02.cpp:9:15: error: cannot convert 'std::string' {aka 'std::__cxx11::basic_string<char>'} to 'const char*'
-    9 |  setName(std::string("Имя"));
-      |               ^~~~~~~~~~~~~~~~
-      |               |
-      |               std::string {aka std::__cxx11::basic_string<char>}
-01/E-02.cpp:5:26: note:   initializing argument 1 of 'void setName(const char*)'
-    5 | void setName(const char* str) {}
-      |              ~~~~~~~~~~~~^~~
-cc1plus: all warnings being treated as errors
-
-W-01.cpp: In function 'int main()':                                                                  
-W-01.cpp:7:8: error: comparison of integer expressions of different signedness: 'int' and 'unsigned int' [-Werror=sign-compare]
-    7 |  if (a < b) {                                                                                
-      |      ~~^~~                                                                                   
-cc1plus: all warnings being treated as errors
-
-In file included from W-03.cpp:1:                                                                    
-W-03.h: In function 'void doWork()':                                                                 
-W-03.h:10:8: error: comparison of integer expressions of different signedness: 'int' and 'unsigned int' [-Werror=sign-compare]
-   10 |  if (a < b) {                                                                                
-      |      ~~^~~                                                                                   
-W-03.h:13:9: error: return-statement with a value, in function returning 'void' [-fpermissive]       
-   13 |  return 0;                                                                                   
-      |         ^                                                                                    
-cc1plus: all warnings being treated as errors
-
+// ----- Синтаксис №1 -----
 
 Число = "0" | ((1 .. 9) {0 .. 9})
-Столбец = Число
-Строка = Число
+Номер_столбца = Число
+Номер_строки = Число
 
-Путь_к_файлу - 
+Путь_к_файлу - Строка
 Путь_подключения_файла = 
-	"In file included from " Путь_к_файлу ":" Строка { ",\n"
-	"                 from " Путь_к_файлу ":" Строка } ":"
-	
-Символ - любой символ, кроме перевода строки ("\n")
-Строка = Символ {Символ} "\n"
-Строка_кода = Строка
-Указание = "      |" Строка "\n"
+	"In file included from " Путь_к_файлу ":" Номер_строки { ",\n"
+	"                 from " Путь_к_файлу ":" Номер_строки } ":".
+
+Символ - любой символ, кроме перевода строки ("\n").
+Строка = Символ {Символ} "\n".
+Строка_кода = Строка.
+Указание = "      |" Строка "\n".
 Указания =
 	Указание
-	{Указание}
+	{Указание}.
 Выдержка_из_кода_с_указаниями = 
-	{" "} Строка " |" Строка_кода "\n"
-	Указания
+	{" "} Номер_строки " |" Строка_кода "\n"
+	Указания.
 
+Путь_раскрытия_выражения_в_шаблоне =
+	Путь_к_файлу ":" ("In instantiation of " | "In substitution of")  Строка "\n"
+	{Путь_к_файлу ":" Номер_строки ":" Номер_столбца ":   required from " Строка "\n"}
+	Путь_к_файлу ":" Номер_строки ":" Номер_столбца ":   required from here" "\n".
+
+Ошибка_или_предупреждение - определено позже.
 Замечание =
 	[Путь_подключения_файла]
-	Путь_к_файлу ":" Строка ":" Столбец ": note: " Описание "\n"
-	Выдержка_из_кода_с_указаниями
-Замечания = {Замечание}
+	Путь_к_файлу ":" Номер_строки ":" Номер_столбца ": note: " Описание "\n"
+	(
+		(
+			Путь_раскрытия выражения_в_шаблоне
+			Ошибка_или_предупреждение
+		) |
+		Выдержка_из_кода_с_указаниями
+	).
+Замечания = {Замечание}.
 
-Предупреждение = Путь_к_файлу ":" Строка ":" Столбец ": warning: " Описание "\n"	
-Ошибка = Путь_к_файлу ":" Строка ":" Столбец ": error: " Описание "\n"
+Предупреждение = ": warning: ".	
+Ошибка = ": error: ".
+Описание = Строка.
 Ошибка_или_предупреждение = 
-	(Ошибка | Предупрждение)
-	Выдержка_из_кода
-	Замечания
-Ошибки_или_предупреждения = Ошибка_или_предупреждение {Ошибка_или_предупреждение}
+	Путь_к_файлу ":" Номер_строки ":" Номер_столбца (Ошибка | Предупреждение) Описание "\n"
+	Выдержка_из_кода_с_указаниями
+	Замечания.
+Ошибки_или_предупреждения = Ошибка_или_предупреждение {Ошибка_или_предупреждение}.
 
 Символ_сигнатуры_функции - любой символ, кроме перевода строки ("\n") и двоеточия (":"),
-одинарной ковычки ("'")
-Сигнатура_функции = Символ_сигнатуры_функции {Символ_сигнатуры_функции}
+одинарной ковычки ("'").
+Сигнатура_функции = Символ_сигнатуры_функции {Символ_сигнатуры_функции}.
 Диагностика =
 	[Путь_подключения_файла]
-	Путь_к_файлу ": In function '" Сигнатура_функции "':\n"
-	Ошибки_или_предупреждения
-	
-Вывод = {Диагностика} ["cc1plus: all warnings being treated as errors"] {"\n"}
+	(
+		(Путь_к_файлу ": In function '" Сигнатура_функции "':\n") |
+		Путь_раскрытия_выражения_в_шаблоне
+	)
+	Ошибки_или_предупреждения.
+
+Вывод = {Диагностика} ["cc1plus: all warnings being treated as errors"] {"\n"}.
+
+Проверка глазами выводов итерации.
+E-01.txt подходит под синтаксис.
+E-02.txt подходит под синтаксис.
+W-01.txt подходит под синтаксис.
+W-02.txt подходит под синтаксис.
+W-03.txt подходит под синтаксис.
+
+Проблемы: пока не прочитаем путь к файлу, номера строки и столбца, не узнаем,
+что перед нами: ошибка, предупреждение или замечание; путь к файлу может быть произвольной строкой,
+а тогда может встретиться такой путь, при котором не понятно, закончился ли путь и начался ли
+следующий элемент объекта. Попробуем составить другой синтаксис.
+В нём будем считать, что замечание относится к последней ошибке или последнему предупреждению 
+на момент обработки замечания. Ещё наложим ограничения на путь к файлу.
+
+
+// ----- Синтаксис №2 -----
+
+Число = "0" | ((1 .. 9) {0 .. 9}).
+Номер_столбца = Число.
+Номер_строки = Число.
+
+Путь_к_файлу - Строка, не содержащая "In file included from ", ":".
+Путь_подключения_файла = 
+	"In file included from " Путь_к_файлу ":" Номер_строки { ",\n"
+	"                 from " Путь_к_файлу ":" Номер_строки } ":".
+
+Символ - любой символ, кроме перевода строки ("\n").
+Строка = Символ {Символ} "\n".
+Строка_кода = Строка.
+Указание = "      |" Строка "\n".
+Указания =
+	Указание
+	{Указание}.
+Выдержка_из_кода_с_указаниями = 
+	{" "} Номер_строки " |" Строка_кода "\n"
+	Указания.
+
+Путь_раскрытия_выражения_в_шаблоне =
+	Путь_к_файлу ":" ("In instantiation of " | "In substitution of")  Строка "\n"
+	{Путь_к_файлу ":" Номер_строки ":" Номер_столбца ":   required from " Строка "\n"}
+	Путь_к_файлу ":" Номер_строки ":" Номер_столбца ":   required from here" "\n".
+
+Символ_сигнатуры_функции - любой символ, кроме перевода строки ("\n") и двоеточия (":"),
+одинарной ковычки ("'").
+Сигнатура_функции = Символ_сигнатуры_функции {Символ_сигнатуры_функции}.
+Предупреждение = ": warning: ".	
+Ошибка = ": error: ".
+Замечание = ": note: ".
+Описание = Строка.
+Диагностика =
+	[Путь_подключения_файла]
+	(
+		(Путь_к_файлу ": In function '" Сигнатура_функции "':\n") |
+		Путь_раскрытия_выражения_в_шаблоне
+	)
+	Путь_к_файлу ":" Номер_строки ":" Номер_столбца (Ошибка | Предупреждение | Замечание)
+	Описание "\n"
+	Выдержка_из_кода_с_указаниями.
+
+Вывод = {Диагностика} ["cc1plus: all warnings being treated as errors"] {"\n"}.
+
+Проверка глазами выводов итерации.
+E-01.txt подходит под синтаксис.
+E-02.txt подходит под синтаксис.
+W-01.txt подходит под синтаксис.
+W-02.txt подходит под синтаксис.
+W-03.txt подходит под синтаксис.
+
+Под этот синтаксис будем разрабатывать парсер.

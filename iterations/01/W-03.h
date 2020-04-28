@@ -10,7 +10,6 @@ void doWork() {
 	if (a < b) {
 		std::printf("2 < 2u!");
 	}
-	return 0;
 }
 
 #endif

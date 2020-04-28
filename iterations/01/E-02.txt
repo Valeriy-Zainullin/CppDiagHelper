@@ -1,5 +1,5 @@
 E-02.cpp: In function 'void setName(const char*)':
-E-02.cpp:5:26: error: unused parameter 'str' [-Werror=unused-parameter]
+E-02.cpp:5:26: warning: unused parameter 'str' [-Wunused-parameter]
     5 | void setName(const char* str) {}
       |              ~~~~~~~~~~~~^~~
 E-02.cpp: In function 'int main()':
@@ -281,4 +281,3 @@ E-02.cpp:9:15: error: cannot convert 'std::string' {aka 'std::__cxx11::basic_str
 E-02.cpp:5:26: note:   initializing argument 1 of 'void setName(const char*)'
     5 | void setName(const char* str) {}
       |              ~~~~~~~~~~~~^~~
-cc1plus: all warnings being treated as errors

@@ -8,7 +8,7 @@ add_compile_options(-pedantic -Wall -Wextra -Wshadow -Werror)
 set(CURSES_NEED_NCURSES TRUE)
 find_package(Curses REQUIRED)
 
-add_executable(CppDiagHelper src/main.cc src/ui.cc)
+add_executable(CppDiagHelper src/main.cc src/ui.cc src/parser.cc)
 target_compile_options(CppDiagHelper PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address,undefined,leak>")
 set(
 	CMAKE_EXE_LINKER_FLAGS_DEBUG

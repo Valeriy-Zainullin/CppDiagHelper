@@ -82,7 +82,7 @@ DiagnosticsList::DiagnosticsList(Console& consoleParam)
 
 const char DiagnosticsList::HEADING_CONST_PART[] = "│ Строка │ Тип           │ Содержание ";
 const std::size_t DiagnosticsList::HEADING_CONST_PART_LEN =
-	sizeof(HEADING_CONST_PART) / sizeof(char);
+	sizeof(HEADING_CONST_PART) / sizeof(char) - 1;
 const unsigned int DiagnosticsList::LINE_COL_WIDTH = 8;
 const unsigned int DiagnosticsList::TYPE_COL_WIDTH = 15;
 const unsigned int DiagnosticsList::DELIMETERS_BEFORE_CONTENT_COL = 3;

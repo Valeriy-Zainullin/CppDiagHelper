@@ -196,7 +196,7 @@ std::vector<Diagnostic> Parser::readOutput() {
 		read(1);
 	}
 
-	check(buffer[0] == END_OF_FILE, "Done processing the input file, but is has not ended.");
+	check(buffer[0] == END_OF_FILE, "Done processing the input file, but it has not ended.");
 
 	return diagnostics;
 }

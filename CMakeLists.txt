@@ -17,3 +17,16 @@ set(
 # target_link_options(CppDiagHelper PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address,undefined,leak>")
 target_include_directories(CppDiagHelper PRIVATE ${CURSES_INCLUDE_DIR})
 target_link_libraries(CppDiagHelper PRIVATE ${CURSES_LIBRARIES})
+
+add_executable(CppDiagHelper_TestParser src/test.cc src/parser.cc)
+target_compile_options(
+	CppDiagHelper_TestParser
+	PRIVATE
+	"$<$<CONFIG:Debug>:-fsanitize=address,undefined,leak>"
+)
+set(
+	CMAKE_EXE_LINKER_FLAGS_DEBUG
+	"${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=address,undefined,leak"
+) # Костыль для cmake 3.12
+# target_link_options(CppDiagHelper PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address,undefined,leak>")
+

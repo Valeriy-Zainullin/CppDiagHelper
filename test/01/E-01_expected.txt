@@ -31,6 +31,3 @@ E-01.cpp:3:7: note:   candidate expects 1 argument, 0 provided
 E-01.cpp:3:7: note: candidate: 'constexpr Student::Student(Student&&)'
 E-01.cpp:3:7: note:   candidate expects 1 argument, 0 provided
 
--
-
--

@@ -9,12 +9,6 @@ E-02.cpp:5:26: error: unused parameter 'str' [-Werror=unused-parameter]
     5 | void setName(const char* str) {}
       |              ~~~~~~~~~~~~^~~
 
--
-
--
-
--
-
 
 8
 ERROR
@@ -301,6 +295,3 @@ E-02.cpp:5:26: note:   initializing argument 1 of 'void setName(const char*)'
     5 | void setName(const char* str) {}
       |              ~~~~~~~~~~~~^~~
 
--
-
--

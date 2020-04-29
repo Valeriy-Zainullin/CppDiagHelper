@@ -12,6 +12,3 @@ W-03.h:10:8: warning: comparison of integer expressions of different signedness:
 
 -
 
--
-
--

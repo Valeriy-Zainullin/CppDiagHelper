@@ -13,12 +13,6 @@ W-02.cpp:2:6: note: shadowed declaration is here
     2 |  int a = 1;
       |      ^
 
--
-
--
-
--
-
 
 11
 WARNING
@@ -32,8 +26,4 @@ W-02.cpp:9:6: note: shadowed declaration is here
     9 |  int b = 1;
       |      ^
 
--
 
--
-
--

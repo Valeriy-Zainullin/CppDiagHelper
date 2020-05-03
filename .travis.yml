@@ -1,0 +1,21 @@
+language: cpp
+compiler: gcc
+os: linux
+
+before_script:
+  - mkdir build_debug
+  - cd build_debug
+  - cmake -DCMAKE_BUILD_TYPE=Debug ..
+  - cd ..
+  - mkdir build_release
+  - cd build_release
+  - cmake -DCMAKE_BUILD_TYPE=Release ..
+  - cd ..
+
+script:
+  - cd build_debug
+  - make
+  - cd ..
+  - cd build_release
+  - make
+  - cd ..

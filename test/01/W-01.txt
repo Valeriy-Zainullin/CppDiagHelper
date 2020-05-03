@@ -1,0 +1,4 @@
+W-01.cpp: In function 'int main()':
+W-01.cpp:7:8: warning: comparison of integer expressions of different signedness: 'int' and 'unsigned int' [-Wsign-compare]
+    7 |  if (a < b) {
+      |      ~~^~~

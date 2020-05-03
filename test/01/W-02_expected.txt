@@ -1,0 +1,29 @@
+2
+
+4
+WARNING
+declaration of 'a' shadows a previous local [-Werror=shadow]
+
+W-02.cpp: In function 'int main()':
+W-02.cpp:4:7: warning: declaration of 'a' shadows a previous local [-Wshadow]
+    4 |   int a = 2;
+      |       ^
+
+W-02.cpp:2:6: note: shadowed declaration is here
+    2 |  int a = 1;
+      |      ^
+
+
+11
+WARNING
+declaration of 'b' shadows a previous local [-Wshadow]
+
+W-02.cpp:11:7: warning: declaration of 'b' shadows a previous local [-Wshadow]
+   11 |   int b = 2;
+      |       ^
+
+W-02.cpp:9:6: note: shadowed declaration is here
+    9 |  int b = 1;
+      |      ^
+
+

@@ -15,7 +15,9 @@ before_script:
 script:
   - cd build_debug
   - make
+  - ./CppDiagHelper_TestParser iteration_01 ../test/01/list.txt
   - cd ..
   - cd build_release
   - make
+  - ./CppDiagHelper_TestParser iteration_01 ../test/01/list.txt
   - cd ..

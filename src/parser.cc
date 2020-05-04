@@ -211,6 +211,7 @@ std::string Parser::readInclusionPath() {
 
 	result += readFilePath();
 	result += readColon();
+	result += std::to_string(readLineNumber());
 
 	while (isPrefixOfBuffer(INCLUSION_PATH_CONTINUATION_PREFIX)) {
 		result += INCLUSION_PATH_CONTINUATION_PREFIX;
@@ -339,6 +340,7 @@ uint32_t Parser::readNumber() {
 		}
 		result *= 10;
 		result += static_cast<uint32_t>(buffer[0] - '0');
+		read(1);
 	}
 	return result;
 }

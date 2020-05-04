@@ -2,164 +2,160 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
-#include <filesystem>
 #include <vector>
 #include <exception>
-#include <cstring>
-#include <algorithm>
+#include <filesystem>
 
 namespace diags::testing::parsing {
-	struct Test {
-		std::string testFilePath;
-		std::vector<diags::parsing::Diagnostic> diagnostics;
-	};
-
-	void readLineFeed(std::istream& inputStream) {
-		char lineFeed;
-		inputStream.read(&lineFeed, 1);
-		if (lineFeed != '\n') {
-			throw std::runtime_error("Expected a line feed, but it is not present.");
-		}
+	std::string readFile(std::istream& inputStream) {
+		std::string contents{std::istreambuf_iterator<char>(inputStream), {}};
+		return contents;
 	}
 
-	std::string readBlock(std::istream& inputStream, char* buffer, std::size_t bufferSize) {
-		const std::size_t maxNumOfLinesInBlock = 200;
-		std::string result;
-		for (std::size_t i = 0; i < maxNumOfLinesInBlock; ++i) {
-			// Проверять, что буффера хватило, захватили перевод строки.
-			inputStream.getline(buffer, bufferSize);
-			if (buffer[0] == '\n') {
-				break;
-			}
-			result += buffer;
+	void dumpDiagnostic(std::ostream& outputStream, const diags::parsing::Diagnostic& diagnostic) {
+		outputStream << '\n';
+		outputStream << diagnostic.lineNum << '\n';
+
+		if (diagnostic.diagType == diags::parsing::DiagnosticType::ERROR) {
+			outputStream << "ERROR" << '\n';
+		} else if (diagnostic.diagType == diags::parsing::DiagnosticType::WARNING) {
+			outputStream << "WARNING" << '\n';
+		} else throw;
+
+		outputStream << diagnostic.detailedDescription << '\n';
+		outputStream << diagnostic.notes << '\n';
+	}
+
+	std::string dumpDiagnostics(const std::vector<diags::parsing::Diagnostic>& diagnostics) {
+		std::stringstream outputStream;
+		outputStream.exceptions(std::ios_base::failbit | std::ios_base::badbit);
+
+		outputStream << diagnostics.size() << '\n';
+		for (const diags::parsing::Diagnostic& diagnostic: diagnostics) {
+			dumpDiagnostic(outputStream, diagnostic);
 		}
-		if (buffer[0] != '\n') {
-			throw std::runtime_error("Too many lines in a block.");
-		}
+
+		std::string result = outputStream.str();
 		return result;
 	}
 
-	bool isEqual(
-		const std::vector<diags::parsing::Diagnostic>& lhs,
-		const std::vector<diags::parsing::Diagnostic>& rhs
-	) {
-		if (lhs.size() != rhs.size()) {
+	std::string adjacentFilePath(const std::string& basePath, const std::string& fileName) {
+		std::string basePathCopy = basePath;
+		std::filesystem::path filePath(basePathCopy);
+		filePath.replace_filename(fileName);
+		return filePath.u8string();
+	}
+
+	bool readLineFeed(std::istream& inputStream) {
+		char lineFeed;
+		inputStream.get(lineFeed);
+		if (!inputStream.bad() && !inputStream.eof() && lineFeed != '\n') {
+			std::cout << "Файл со списком тестов не соответствует синтаксису: ";
+			std::cout << "ожидался перевод строки, но он не был встречен." << '\n';
 			return false;
-		}
-		for (std::size_t pos = 0; pos < lhs.size(); ++pos) {
-			if (!(
-				lhs[pos].lineNum == rhs[pos].lineNum &&
-				lhs[pos].diagType == rhs[pos].diagType &&
-				lhs[pos].description == rhs[pos].description &&
-				lhs[pos].detailedDescription == rhs[pos].detailedDescription &&
-				lhs[pos].notes == rhs[pos].notes
-			)) {
-				return false;
-			}
 		}
 		return true;
 	}
 
-	std::vector<diags::parsing::Diagnostic> decodeTestAnswer(std::string& testAnswerPath) {
-		std::ifstream inputStream(testAnswerPath);
-		inputStream.exceptions(std::ios_base::failbit | std::ios_base::badbit);
+	bool testParser(const std::string& testSetName, const std::string& testListPath) {
+		std::cout << testSetName << '.' << '\n';
 
-		const std::size_t bufferSize = 1024;
-		char buffer[bufferSize];
-
-		unsigned int nDiags;
-		inputStream >> nDiags;
-		readLineFeed(inputStream);
-
-		std::vector<diags::parsing::Diagnostic> diagnostics;
-
-		for (unsigned int i = 0; i < nDiags; ++i) {
-			diags::parsing::Diagnostic diagnostic;
-
-			readLineFeed(inputStream);
-
-			inputStream >> diagnostic.lineNum;
-			readLineFeed(inputStream);
-
-			inputStream.getline(buffer, bufferSize);
-			if (std::strcmp(buffer, "ERROR\n") == 0) {
-				diagnostic.diagType = diags::parsing::DiagnosticType::ERROR;
-			} else if (std::strcmp(buffer, "WARNING\n") == 0) {
-				diagnostic.diagType = diags::parsing::DiagnosticType::WARNING;
-			} else {
-				throw std::runtime_error("Unsupported diagnostic type.");
-			}
-			readLineFeed(inputStream);
-
-			diagnostic.description = readBlock(inputStream, buffer, bufferSize);
-			// Проверять, что это всегда так?
-			if (diagnostic.description.back() == '\n') {
-				diagnostic.description.pop_back();
-			}
-
-			diagnostic.detailedDescription = readBlock(inputStream, buffer, bufferSize);
-			diagnostic.notes = readBlock(inputStream, buffer, bufferSize);
-
-			diagnostics.push_back(std::move(diagnostic));
+		std::ifstream testListFileStream(testListPath);
+		if (testListFileStream.fail()) {
+			std::cout << "Не удалось открыть файл со списком тестов." << '\n';
+			return false;
 		}
 
-		return diagnostics;
-	}
+		int nTests;
+		std::string nTestsAsStr;
+		std::getline(testListFileStream, nTestsAsStr);
+		if (testListFileStream.eof() || testListFileStream.fail()) {
+			std::cout << "Не удалось прочитать количество тестов." << '\n';
+			return false;
+		}
+		nTests = std::stoi(nTestsAsStr);
 
-	bool testParser(std::string testDirPath) {
-		std::cout << testDirPath << ':' << std::endl;
+		bool hasPassed = true;
+		for (int i = 0; i < nTests; ++i) {
+			std::string testName;
+			std::string testFileName;
+			std::string testAnswerFileName;
 
-		const std::string testAnswerFileNameSuffix = "_expected.txt";
-		std::vector<std::filesystem::path> testAnswerPaths;
-		for (const auto& entry: std::filesystem::directory_iterator(testDirPath)) {
-			if (entry.is_regular_file()) {
-				std::string fileName = entry.path().filename().generic_u8string();
-				std::string::size_type pos = fileName.rfind(testAnswerFileNameSuffix);
-				if (pos != std::string::npos && fileName.size() - pos == testAnswerFileNameSuffix.size()) {
-					testAnswerPaths.push_back(entry);
+			if (!readLineFeed(testListFileStream)) {
+				return false;
+			}
+			std::getline(testListFileStream, testName);
+			std::getline(testListFileStream, testFileName);
+			std::getline(testListFileStream, testAnswerFileName);
+
+			std::string testFilePath = adjacentFilePath(testListPath, testFileName);
+			std::string testAnswerFilePath = adjacentFilePath(testListPath, testAnswerFileName);
+
+			if (testListFileStream.bad()) {
+				std::cout << "Ошибка при чтении файла со списком тестов." << '\n';
+				return false;
+			} else if (testListFileStream.eof()) {
+				std::cout << "Неожиданный конец файла со списком тестов." << '\n';
+				return false;
+			} else if (testListFileStream.fail()) {
+				std::cout << "Файл со списком тестов не соответствует синтаксису." << '\n';
+				return false;
+			}
+
+			std::ifstream testFileStream(testFilePath);
+			if (testFileStream.fail()) {
+				std::cout << "Не удалось открыть файл с тестом. Путь: \"" << testFilePath << "\"." << '\n';
+				return false;
+			}
+
+			std::ifstream testAnswerFileStream(testAnswerFilePath);
+			if (testAnswerFileStream.fail()) {
+				std::cout << "Не удалось открыть файл с ответом на тест. Путь: \"" << testAnswerFilePath;
+				std::cout << "\"." << '\n';
+				return false;
+			}
+
+			std::string testAnswer = readFile(testAnswerFileStream);
+			if (testAnswerFileStream.fail()) {
+				std::cout << "Не удалось прочитать ответ на тест." << '\n';
+				return false;
+			}
+
+			try {
+				std::vector<diags::parsing::Diagnostic> diagnostics =
+					diags::parsing::Parser(testFileStream).parse();
+				if (dumpDiagnostics(diagnostics) != testAnswer) {
+					std::cout << testName << ": ответ неверный (дампы не совпали)." << '\n';
+					hasPassed = false;
+				} else {
+					std::cout << testName << ": OK." << '\n';
 				}
+			} catch (std::exception& exc) {
+				std::cout << testName << ": парсер бросил исключение. Описание: \"" << exc.what();
+				std::cout << "\"." << '\n';
+				hasPassed = false;
 			}
 		}
-		std::sort(testAnswerPaths.begin(), testAnswerPaths.end());
-
-		bool passed = true;
-		const std::string testFileNameSuffix = ".txt";
-		for (const auto& testAnswerPath: testAnswerPaths) {
-			std::string testAnswerFileName = testAnswerPath.filename().generic_u8string();
-			std::string testName = testAnswerFileName.substr(
-				0,
-				testAnswerFileName.size() - testAnswerFileNameSuffix.size()
-			);
-			std::string testFileName = testName + testFileNameSuffix;
-			std::filesystem::path testPath = testAnswerPath;
-			testPath.replace_filename(testFileName);
-			if (std::filesystem::exists(testPath)) {
-				std::ifstream inputStream(testPath.relative_path().generic_u8string());
-				std::string testAnswerPathString = testAnswerPath.relative_path().generic_u8string();
-				std::vector<diags::parsing::Diagnostic> answers = decodeTestAnswer(testAnswerPathString);
-				try {
-					if (isEqual(diags::parsing::Parser(inputStream).parse(), answers)) {
-						std::cout << testName << ": OK." << std::endl;
-					} else {
-						std::cout << testName << ": FAILED (wrong answer)." << std::endl;
-						passed = false;
-					}
-				} catch (std::exception& exc) {
-					std::cout << testName << ": FAILED (exception has been thrown).\n";
-					std::cout << exc.what() << std::endl;
-				}
-			} else {
-				std::cout << testName << ": test file is not found!" << std::endl;
-			}
-		}
-		return passed;
+		return hasPassed;
 	}
 }
 
 int main(int argc, char** argv) {
-	for (int i = 1; i < argc; ++i) {
-		diags::testing::parsing::testParser(std::string(argv[i]));
+	if (argc != 3) {
+		std::cout << "Использование: \"" << argv[0] << " [название набора] [путь к списку]\"." << '\n';
+		std::cout << "Проверяет парсер на тестах из набора в порядке следования в списке." << '\n';
+		std::cout << "Внимание: программа не проверяет размер входных файлов, но ей приходится ";
+		std::cout << "читать полностью их содержимое в память." << '\n';
+		return 1;
 	}
+
+	std::string testSetName = argv[1];
+	std::string testListPath = argv[2];
+	if (!diags::testing::parsing::testParser(testSetName, testListPath)) {
+		return 2;
+	}
+
 	return 0;
 }

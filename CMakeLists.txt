@@ -8,27 +8,33 @@ add_compile_options(-pedantic -Wall -Wextra -Wshadow -Werror)
 set(CURSES_NEED_NCURSES TRUE)
 find_package(Curses REQUIRED)
 
-add_executable(CppDiagHelper src/main.cc src/ui.cc src/parser.cc)
-target_compile_options(CppDiagHelper PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address,undefined,leak>")
-set(
-	CMAKE_EXE_LINKER_FLAGS_DEBUG
-	"${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=address,undefined,leak"
-) # Костыль для cmake 3.12
+find_package(wxWidgets COMPONENTS core base REQUIRED)
+include(${wxWidgets_USE_FILE})
+
+# add_executable(CppDiagHelper src/tui_main.cc src/tui.cc src/parser.cc)
+add_executable(CppDiagHelper src/gui.cc src/parser.cc)
+#target_compile_options(CppDiagHelper PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address,undefined,leak>")
+#set(
+#	CMAKE_EXE_LINKER_FLAGS_DEBUG
+#	"${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=address,undefined,leak"
+#) # Костыль для cmake 3.12
 # target_link_options(CppDiagHelper PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address,undefined,leak>")
 target_include_directories(CppDiagHelper PRIVATE ${CURSES_INCLUDE_DIR})
-target_link_libraries(CppDiagHelper PRIVATE ${CURSES_LIBRARIES})
+# target_link_libraries(CppDiagHelper PRIVATE ${CURSES_LIBRARIES})
+target_link_libraries(CppDiagHelper PRIVATE ${wxWidgets_LIBRARIES})
+
 
 add_executable(CppDiagHelper_TestParser src/test.cc src/parser.cc)
-target_compile_options(
-	CppDiagHelper_TestParser
-	PRIVATE
-	"$<$<CONFIG:Debug>:-fsanitize=address,undefined,leak>"
-)
-set(
-	CMAKE_EXE_LINKER_FLAGS_DEBUG
-	"${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=address,undefined,leak"
-) # Костыль для cmake 3.12
-# target_link_options(CppDiagHelper PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address,undefined,leak>")
+#target_compile_options(
+#	CppDiagHelper_TestParser
+#	PRIVATE
+#	"$<$<CONFIG:Debug>:-fsanitize=address,undefined,leak>"
+#)
+#set(
+#	CMAKE_EXE_LINKER_FLAGS_DEBUG
+#	"${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=address,undefined,leak"
+#) # Костыль для cmake 3.12
+# target_link_options(CppDiagHelper_TestParser PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address,undefined,leak>")
 
 # Не требуется для gcc 9.3 (на моей системе), но нужно для gcc 8.
 target_link_libraries(CppDiagHelper_TestParser PRIVATE stdc++fs)

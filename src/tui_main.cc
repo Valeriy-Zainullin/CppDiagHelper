@@ -1,8 +1,8 @@
 #include <cstdio>
-#include "ui.h"
+#include "tui.h"
 
-using diags::ui::Console;
-using diags::ui::Interface;
+using diags::tui::Console;
+using diags::tui::Interface;
 
 int main() {
 	Console console;

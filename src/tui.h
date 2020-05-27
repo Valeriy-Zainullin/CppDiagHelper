@@ -4,7 +4,7 @@
 #include <cstddef>
 
 namespace diags {
-	namespace ui {
+	namespace tui {
 		class Console {
 		public:
 			Console();

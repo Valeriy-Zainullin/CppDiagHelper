@@ -1,4 +1,4 @@
-#include "ui.h"
+#include "tui.h"
 
 #include <ncurses.h>
 #include <clocale>
@@ -9,7 +9,7 @@
 
 // TODO: Добавить обработку ошибок при работе с ncurses.
 
-using namespace diags::ui;
+using namespace diags::tui;
 
 Console::Console() {
 	if (std::setlocale(LC_ALL, "ru_RU.UTF-8") == nullptr) {

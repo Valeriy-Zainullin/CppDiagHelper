@@ -6,6 +6,7 @@ addons:
   apt:
     packages:
       - g++-8
+      - valgrind
 
 before_script:
   - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 100 --slave /usr/bin/g++ g++ /usr/bin/g++-8
@@ -22,7 +23,7 @@ before_script:
 script:
   - cd build_debug
   - make
-  - ./CppDiagHelper_TestParser iteration_02 ../test/02/list.txt
+  - valgrind ./CppDiagHelper_TestParser iteration_02 ../test/02/list.txt
   - cd ..
   - cd build_release
   - make

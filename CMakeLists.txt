@@ -30,3 +30,6 @@ set(
 ) # Костыль для cmake 3.12
 # target_link_options(CppDiagHelper PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address,undefined,leak>")
 
+# Не требуется для gcc 9.3 (на моей системе), но нужно для gcc 8.
+target_link_libraries(CppDiagHelper_TestParser PRIVATE stdc++fs)
+

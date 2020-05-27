@@ -2,8 +2,14 @@ language: cpp
 compiler: gcc
 os: linux
 dist: bionic
+addons:
+  apt:
+    packages:
+      - g++-8
 
 before_script:
+  - update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 100 --slave /usr/bin/g++ g++ /usr/bin/g++-8
+  - update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 50 --slave /usr/bin/g++ g++ /usr/bin/g++-7
   - mkdir build_debug
   - cd build_debug
   - cmake -DCMAKE_BUILD_TYPE=Debug ..

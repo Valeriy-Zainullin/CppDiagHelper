@@ -14,6 +14,14 @@ namespace diags::testing::parsing {
 		return contents;
 	}
 
+	void dumpComponent(std::ostream& outputStream, const std::string& component) {
+		if (component.empty()) {
+			outputStream << '-' << '\n';
+		} else {
+			outputStream << component << '\n';
+		}
+	}
+
 	void dumpDiagnostic(std::ostream& outputStream, const diags::parsing::Diagnostic& diagnostic) {
 		outputStream << '\n';
 		outputStream << diagnostic.lineNum << '\n';
@@ -23,9 +31,11 @@ namespace diags::testing::parsing {
 		} else if (diagnostic.diagType == diags::parsing::DiagnosticType::WARNING) {
 			outputStream << "WARNING" << '\n';
 		} else throw;
+		dumpComponent(outputStream, diagnostic.description);
+		outputStream << '\n';
 
-		outputStream << diagnostic.detailedDescription << '\n';
-		outputStream << diagnostic.notes << '\n';
+		dumpComponent(outputStream, diagnostic.detailedDescription);
+		dumpComponent(outputStream, diagnostic.notes);
 	}
 
 	std::string dumpDiagnostics(const std::vector<diags::parsing::Diagnostic>& diagnostics) {

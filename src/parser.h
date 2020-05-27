@@ -1,3 +1,6 @@
+#ifndef PARSER_H
+#define PARSER_H
+
 #include <cstdint>
 #include <vector>
 #include <string>
@@ -116,3 +119,5 @@ namespace diags {
 		};
 	}
 }
+
+#endif

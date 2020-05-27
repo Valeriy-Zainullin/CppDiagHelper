@@ -5,6 +5,7 @@
 #include <cstring>
 #include <string>
 #include <cstdint>
+#include <iostream>
 
 
 using namespace diags::parsing;
@@ -49,7 +50,7 @@ const char Parser::INCLUSION_PATH_PREFIX[] = "In file included from ";
 const std::size_t Parser::INCLUSION_PATH_PREFIX_LEN =
 	sizeof(INCLUSION_PATH_PREFIX) / sizeof(char) - 1;
 
-const char Parser::IN_FUNCTION_PREFIX[] = ": In function '";
+const char Parser::IN_FUNCTION_PREFIX[] = " In function '";
 const std::size_t Parser::IN_FUNCTION_PREFIX_LEN = sizeof(IN_FUNCTION_PREFIX) / sizeof(char) - 1;
 
 const char Parser::IN_FUNCTION_ENDING[] = "':\n";
@@ -70,12 +71,12 @@ const char Parser::INCLUSION_PATH_CONTINUATION_PREFIX[] = ",\n                 f
 const std::size_t Parser::INCLUSION_PATH_CONTINUATION_PREFIX_LEN =
 	sizeof(INCLUSION_PATH_CONTINUATION_PREFIX) / sizeof(char) - 1;
 
-const char Parser::INCLUSION_PATH_INSTANTIATION_PREFIX[] = "In instantiation of ";
+const char Parser::INCLUSION_PATH_INSTANTIATION_PREFIX[] = " In instantiation of ";
 const std::size_t Parser::INCLUSION_PATH_INSTANTIATION_PREFIX_LEN =
 	sizeof(INCLUSION_PATH_INSTANTIATION_PREFIX) / sizeof(char) - 1;
 
 // На следующей итерации надо в обоих случаях учитывать пробел в конце.
-const char Parser::INCLUSION_PATH_SUBSTITUTION_PREFIX[] = "In substitution of";
+const char Parser::INCLUSION_PATH_SUBSTITUTION_PREFIX[] = " In substitution of";
 const std::size_t Parser::INCLUSION_PATH_SUBSTITUTION_PREFIX_LEN =
 	sizeof(INCLUSION_PATH_SUBSTITUTION_PREFIX) / sizeof(char) - 1;
 
@@ -85,7 +86,7 @@ const std::size_t Parser::INCLUSION_PATH_REQUIRED_FROM_PREFIX_LEN =
 
 const char Parser::INCLUSION_PATH_REQUIRED_FROM_HERE_PREFIX[] = ":   required from here\n";
 const std::size_t Parser::INCLUSION_PATH_REQUIRED_FROM_HERE_PREFIX_LEN =
-	sizeof(INCLUSION_PATH_REQUIRED_FROM_HERE_PREFIX_LEN) / sizeof(char) - 1;
+	sizeof(INCLUSION_PATH_REQUIRED_FROM_HERE_PREFIX) / sizeof(char) - 1;
 
 const char Parser::CODE_EXCERPT_WITH_REFERENCES_SEP_PREFIX[] = " |";
 const std::size_t Parser::CODE_EXCERPT_WITH_REFERENCES_SEP_PREFIX_LEN =
@@ -106,85 +107,139 @@ const std::size_t Parser::REFERENCE_PREFIX_LEN = sizeof(REFERENCE_PREFIX) / size
 // туда же в замечания.
 std::vector<Diagnostic> Parser::readOutput() {
 	std::vector<Diagnostic> diagnostics;
-	bool isSubDiag = false;
-	bool haveErrors = false;
-	std::size_t lastErrorPos;
+	bool nextIsSubDiag = false;
 	while (buffer[0] != END_OF_FILE && !isPrefixOfBuffer(WERROR_PREFIX) && buffer[0] != '\n') {
 		Diagnostic diagnostic;
 		if (isPrefixOfBuffer(INCLUSION_PATH_PREFIX)) {
 			diagnostic.detailedDescription += readInclusionPath();
 		}
 		diagnostic.detailedDescription += readFilePath();
+		diagnostic.detailedDescription += readColon();
 		if (isPrefixOfBuffer(IN_FUNCTION_PREFIX)) {
 			diagnostic.detailedDescription += IN_FUNCTION_PREFIX;
 			read(IN_FUNCTION_PREFIX_LEN);
 			diagnostic.detailedDescription += readFunctionSignature();
 			check(
 				isPrefixOfBuffer(IN_FUNCTION_ENDING),
-				"Expected ending of the \"In function\" block, but it is not present."
+				"Expected ending of the \" In function\" block, but it is not present."
 			);
 			diagnostic.detailedDescription += IN_FUNCTION_ENDING;
 			read(IN_FUNCTION_ENDING_LEN);
+
+			diagnostic.detailedDescription += readFilePath();
+			diagnostic.detailedDescription += readColon();
+			diagnostic.lineNum = readLineNumber();
+			diagnostic.detailedDescription += std::to_string(diagnostic.lineNum);
+			diagnostic.detailedDescription += readColon();
+			diagnostic.detailedDescription += std::to_string(readColumnNumber());
+
+			check(
+				isPrefixOfBuffer(ERROR_PREFIX) ||
+				isPrefixOfBuffer(WARNING_PREFIX) ||
+				isPrefixOfBuffer(NOTE_PREFIX),
+				"Expected diagnostics type (error, warning or note), but it is not present."
+			);
+			if (isPrefixOfBuffer(ERROR_PREFIX)) {
+				diagnostic.diagType = DiagnosticType::ERROR;
+				diagnostic.detailedDescription += ERROR_PREFIX;
+				read(ERROR_PREFIX_LEN);
+			} else if (isPrefixOfBuffer(WARNING_PREFIX)) {
+				diagnostic.diagType = DiagnosticType::WARNING;
+				diagnostic.detailedDescription += WARNING_PREFIX;
+				read(WARNING_PREFIX_LEN);
+			} else if (isPrefixOfBuffer(NOTE_PREFIX)) {
+				diagnostic.diagType = DiagnosticType::NOTE;
+				diagnostic.detailedDescription += NOTE_PREFIX;
+				read(NOTE_PREFIX_LEN);
+			} else throw;
+		} else if (
+			isPrefixOfBuffer(INCLUSION_PATH_INSTANTIATION_PREFIX) ||
+			isPrefixOfBuffer(INCLUSION_PATH_SUBSTITUTION_PREFIX)
+		) {
+			diagnostic.detailedDescription += readTemplateExpansionPath(diagnostic.lineNum);
+
+			diagnostic.detailedDescription += readFilePath();
+			diagnostic.detailedDescription += readColon();
+			diagnostic.detailedDescription += std::to_string(readLineNumber());
+			diagnostic.detailedDescription += readColon();
+			diagnostic.detailedDescription += std::to_string(readColumnNumber());
+
+			check(
+				isPrefixOfBuffer(ERROR_PREFIX) ||
+				isPrefixOfBuffer(WARNING_PREFIX) ||
+				isPrefixOfBuffer(NOTE_PREFIX),
+				"Expected diagnostics type (error, warning or note), but it is not present."
+			);
+			if (isPrefixOfBuffer(ERROR_PREFIX)) {
+				diagnostic.diagType = DiagnosticType::ERROR;
+				diagnostic.detailedDescription += ERROR_PREFIX;
+				read(ERROR_PREFIX_LEN);
+			} else if (isPrefixOfBuffer(WARNING_PREFIX)) {
+				diagnostic.diagType = DiagnosticType::WARNING;
+				diagnostic.detailedDescription += WARNING_PREFIX;
+				read(WARNING_PREFIX_LEN);
+			} else if (isPrefixOfBuffer(NOTE_PREFIX)) {
+				diagnostic.diagType = DiagnosticType::NOTE;
+				diagnostic.detailedDescription += NOTE_PREFIX;
+				read(NOTE_PREFIX_LEN);
+			} else throw;
 		} else {
-			diagnostic.detailedDescription += readTemplateExpansionPath();
+			diagnostic.lineNum = readLineNumber();
+			diagnostic.detailedDescription += std::to_string(diagnostic.lineNum);
+			diagnostic.detailedDescription += readColon();
+			diagnostic.detailedDescription += std::to_string(readColumnNumber());
+
+			check(
+				isPrefixOfBuffer(ERROR_PREFIX) ||
+				isPrefixOfBuffer(WARNING_PREFIX) ||
+				isPrefixOfBuffer(NOTE_PREFIX),
+				"Expected diagnostics type (error, warning or note), but it is not present."
+			);
+			if (isPrefixOfBuffer(ERROR_PREFIX)) {
+				diagnostic.diagType = DiagnosticType::ERROR;
+				diagnostic.detailedDescription += ERROR_PREFIX;
+				read(ERROR_PREFIX_LEN);
+			} else if (isPrefixOfBuffer(WARNING_PREFIX)) {
+				diagnostic.diagType = DiagnosticType::WARNING;
+				diagnostic.detailedDescription += WARNING_PREFIX;
+				read(WARNING_PREFIX_LEN);
+			} else if (isPrefixOfBuffer(NOTE_PREFIX)) {
+				diagnostic.diagType = DiagnosticType::NOTE;
+				diagnostic.detailedDescription += NOTE_PREFIX;
+				read(NOTE_PREFIX_LEN);
+			} else throw;
 		}
-		diagnostic.detailedDescription += readFilePath();
-		diagnostic.detailedDescription += readColon();
-		read(1);
-		diagnostic.lineNum = readLineNumber();
-		diagnostic.detailedDescription += std::to_string(diagnostic.lineNum);
-		diagnostic.detailedDescription += std::to_string(readColumnNumber());
 
-		check(
-			isPrefixOfBuffer(ERROR_PREFIX) ||
-			isPrefixOfBuffer(WARNING_PREFIX) ||
-			isPrefixOfBuffer(NOTE_PREFIX),
-			"Expected diagnostics type (error, warning or note), but it is not present."
-		);
-		if (isPrefixOfBuffer(ERROR_PREFIX)) {
-			diagnostic.diagType = DiagnosticType::ERROR;
-			diagnostic.detailedDescription += ERROR_PREFIX;
-			read(ERROR_PREFIX_LEN);
-		} else if (isPrefixOfBuffer(WARNING_PREFIX)) {
-			diagnostic.diagType = DiagnosticType::WARNING;
-			diagnostic.detailedDescription += WARNING_PREFIX;
-			read(WARNING_PREFIX_LEN);
-		} else if (isPrefixOfBuffer(NOTE_PREFIX)) {
-			diagnostic.diagType = DiagnosticType::NOTE;
-			diagnostic.detailedDescription += NOTE_PREFIX;
-			read(NOTE_PREFIX_LEN);
-		} else throw;
-
-		diagnostic.description = readDescription();
+		bool isSubDiag = nextIsSubDiag;
+		nextIsSubDiag = false;
+		if (isPrefixOfBuffer("  ")) {
+			diagnostic.description = readDescriptionWithTwoSpaces();
+			isSubDiag = true;
+		} else {
+			diagnostic.description = readDescription();
+		}
+		diagnostic.detailedDescription += diagnostic.description;
+		diagnostic.detailedDescription += readLinefeed();
+		if (isPrefixOfBuffer(" ")) {
+			diagnostic.detailedDescription += readCodeExcerptWithReferences();
+		}
 		check(
 			!diagnostic.description.empty(),
 			"Expected description of the diagnostic, but it is not present."
 		);
-		diagnostic.detailedDescription += diagnostic.description;
-		diagnostic.detailedDescription += readLinefeed();
-		read(1);
-
-		if (diagnostic.description.back() != ':') {
-			diagnostic.detailedDescription += readCodeExcerptWithReferences();
+		if (diagnostic.description.back() == ':') {
+			nextIsSubDiag = true;
 		}
 
 		if (diagnostic.diagType == DiagnosticType::NOTE || isSubDiag) {
 			check(
-				haveErrors,
-				"Expected an error before current diagnostic to add notes and subdiagnostics to, "
+				!diagnostics.empty(),
+				"Expected a diagnostics before current diagnostic to add notes and subdiagnostics to, "
 				"but it is not present."
 			);
-			diagnostics[lastErrorPos].notes += diagnostic.detailedDescription;
-			isSubDiag = false;
+			diagnostics.back().notes += diagnostic.detailedDescription;
 		} else {
-			if (diagnostic.diagType == DiagnosticType::ERROR) {
-				haveErrors = true;
-				lastErrorPos = diagnostics.size();
-			}
-			diagnostics.push_back(diagnostic);
-		}
-		if (diagnostic.description.back() == ':') {
-			isSubDiag = true;
+			diagnostics.push_back(std::move(diagnostic));
 		}
 	}
 
@@ -221,6 +276,7 @@ std::string Parser::readInclusionPath() {
 		result += std::to_string(readLineNumber());
 	}
 	result += readColon();
+	result += readLinefeed();
 	return result;
 }
 
@@ -258,15 +314,13 @@ std::string Parser::readFunctionSignature() {
 
 // TODO: обратить внимание на синтаксис пути раскрытия выражения в шаболне.
 // TODO: дописать сообщение для check.
-std::string Parser::readTemplateExpansionPath() {
+std::string Parser::readTemplateExpansionPath(uint32_t& lineNum) {
 	std::string result;
-	result += readFilePath();
-	result += readColon();
 
 	check(
 		isPrefixOfBuffer(INCLUSION_PATH_INSTANTIATION_PREFIX) ||
 		isPrefixOfBuffer(INCLUSION_PATH_SUBSTITUTION_PREFIX),
-		"Expected \"In instantiation of \" or \"In substitution of\", but both of them are not present"
+		"Expected \"In instantiation of \" or \"In substitution of\", but both of them are not present."
 	);
 	if (isPrefixOfBuffer(INCLUSION_PATH_INSTANTIATION_PREFIX)) {
 		result += INCLUSION_PATH_INSTANTIATION_PREFIX;
@@ -280,7 +334,8 @@ std::string Parser::readTemplateExpansionPath() {
 	while (buffer[0] != END_OF_FILE) {
 		result += readFilePath();
 		result += readColon();
-		result += std::to_string(readLineNumber());
+		lineNum = readLineNumber();
+		result += std::to_string(lineNum);
 		result += readColon();
 		result += std::to_string(readColumnNumber());
 		check(
@@ -296,7 +351,7 @@ std::string Parser::readTemplateExpansionPath() {
 			result += INCLUSION_PATH_REQUIRED_FROM_PREFIX;
 			read(INCLUSION_PATH_REQUIRED_FROM_PREFIX_LEN);
 			result += readString();
-			readLinefeed();
+			result += readLinefeed();
 		} else throw;
 	}
 	return result;
@@ -312,6 +367,12 @@ std::string Parser::readLinefeed() {
 	check(isPrefixOfBuffer("\n"), "Expected a linefeed, but it is not present.");
 	read(1);
 	return std::string("\n");
+}
+
+std::string Parser::readSpace() {
+	check(isPrefixOfBuffer(" "), "Expected a space, but it is not present.");
+	read(1);
+	return std::string(" ");
 }
 
 uint32_t Parser::readLineNumber() {
@@ -334,6 +395,7 @@ uint32_t Parser::readNumber() {
 		"is not in that range."
 	);
 	uint32_t result = static_cast<uint32_t>(buffer[0] - '0');
+	read(1);
 	for (uint32_t numberLen = 1; numberLen < MAX_NUMBER_LEN; ++numberLen) {
 		if (buffer[0] < '0' || buffer[0] > '9') {
 			break;
@@ -346,7 +408,27 @@ uint32_t Parser::readNumber() {
 }
 
 std::string Parser::readDescription() {
-	return readString();
+	// TODO: другое сообщение?
+	std::string result;
+	for (int i = 0; i < 2; ++i) {
+		check(buffer[0] != END_OF_FILE && buffer[0] != ' ', "Expected a non-space character.");
+		result += buffer[0];
+		read(1);
+	}
+	result += readString();
+	return result;
+}
+
+std::string Parser::readDescriptionWithTwoSpaces() {
+	// TODO: другое сообщение?
+	std::string result;
+	for (int i = 0; i < 2; ++i) {
+		check(buffer[0] != END_OF_FILE && buffer[0] == ' ', "Expected space character.");
+		result += buffer[0];
+		read(1);
+	}
+	result += readString();
+	return result;
 }
 
 bool Parser::isStringChar() {
@@ -389,13 +471,17 @@ std::string Parser::readReferences() {
 // Возможно, (очень вероятно) что слово "references" не подходит в качестве перевода.
 std::string Parser::readCodeExcerptWithReferences() {
 	std::string result;
+	result += readSpace();
 	while (buffer[0] == ' ') {
 		result += buffer[0];
 		read(1);
 	}
-	result += readLineNumber();
+	result += std::to_string(readLineNumber());
 	check(isPrefixOfBuffer(CODE_EXCERPT_WITH_REFERENCES_SEP_PREFIX), "Expected ");
+	result += CODE_EXCERPT_WITH_REFERENCES_SEP_PREFIX;
 	read(CODE_EXCERPT_WITH_REFERENCES_SEP_PREFIX_LEN);
+	result += readString();
+	result += readLinefeed();
 	result += readReferences();
 	return result;
 }
@@ -422,11 +508,17 @@ void Parser::read(std::size_t nToRead) {
 	inputStream.read(buffer + BUFFER_SIZE - nToRead, nToRead);
 	if (inputStream.bad()) {
 		throw std::runtime_error("Failed to read from the input stream!");
+	} else if (inputStream.eof()) {
+		std::streamsize nRead = inputStream.gcount();
+		assert(nRead >= 0);
+		assert(static_cast<std::size_t>(nRead) < nToRead);
+		buffer[BUFFER_SIZE - nToRead + nRead] = END_OF_FILE;
 	}
 }
 
 void Parser::check(bool condition, const char* message) {
 	if (!condition) {
+		std::cout << buffer << '\n';
 		throw std::runtime_error(message);
 	}
 }

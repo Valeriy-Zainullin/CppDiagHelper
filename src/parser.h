@@ -87,16 +87,18 @@ namespace diags {
 			bool isFunctionSignatureChar();
 			std::string readFunctionSignature();
 
-			std::string readTemplateExpansionPath();
+			std::string readTemplateExpansionPath(uint32_t& lineNum);
 
 			std::string readColon();
 			std::string readLinefeed();
+			std::string readSpace();
 
 			uint32_t readLineNumber();
 			uint32_t readColumnNumber();
 			uint32_t readNumber();
 
 			std::string readDescription();
+			std::string readDescriptionWithTwoSpaces();
 
 			bool isStringChar();
 			std::string readString();

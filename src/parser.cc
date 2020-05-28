@@ -5,7 +5,6 @@
 #include <cstring>
 #include <string>
 #include <cstdint>
-#include <iostream>
 
 
 using namespace diags::parsing;
@@ -518,7 +517,6 @@ void Parser::read(std::size_t nToRead) {
 
 void Parser::check(bool condition, const char* message) {
 	if (!condition) {
-		std::cout << buffer << '\n';
 		throw std::runtime_error(message);
 	}
 }

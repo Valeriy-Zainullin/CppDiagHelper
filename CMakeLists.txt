@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories("src/")
 add_compile_options(-pedantic -Wall -Wextra -Wshadow -Werror)
 
-set(CURSES_NEED_NCURSES TRUE)
-find_package(Curses REQUIRED)
+#set(CURSES_NEED_NCURSES TRUE)
+#find_package(Curses REQUIRED)
 
 find_package(wxWidgets COMPONENTS core base REQUIRED)
 include(${wxWidgets_USE_FILE})
@@ -19,7 +19,7 @@ add_executable(CppDiagHelper src/gui.cc src/parser.cc)
 #	"${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=address,undefined,leak"
 #) # Костыль для cmake 3.12
 # target_link_options(CppDiagHelper PRIVATE "$<$<CONFIG:Debug>:-fsanitize=address,undefined,leak>")
-target_include_directories(CppDiagHelper PRIVATE ${CURSES_INCLUDE_DIR})
+# target_include_directories(CppDiagHelper PRIVATE ${CURSES_INCLUDE_DIR})
 # target_link_libraries(CppDiagHelper PRIVATE ${CURSES_LIBRARIES})
 target_link_libraries(CppDiagHelper PRIVATE ${wxWidgets_LIBRARIES})
 
